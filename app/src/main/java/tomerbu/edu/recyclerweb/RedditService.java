@@ -1,13 +1,18 @@
 package tomerbu.edu.recyclerweb;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Locale;
 
+import tomerbu.edu.recyclerweb.models.Reddit;
+import tomerbu.edu.recyclerweb.models.RedditParser;
 import tomerbu.edu.recyclerweb.utils.IOUtils;
 
 /**
@@ -34,6 +39,11 @@ public class RedditService extends AsyncTask {
 
             InputStream in = con.getInputStream();
             String data = IOUtils.getString(in);
+
+            ArrayList<Reddit> reddits = RedditParser.parse(data);
+
+            Log.d("iTomer", reddits.toString());
+            System.out.println(reddits);
             return data;
         } catch (Exception e) {
             e.printStackTrace();
