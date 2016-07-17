@@ -1,11 +1,14 @@
 package tomerbu.edu.recyclerweb;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -37,7 +40,16 @@ public class RedditAdapter extends RecyclerView.Adapter<RedditAdapter.RedditView
 
     @Override
     public void onBindViewHolder(RedditViewHolder holder, int position) {
-        Reddit reddit = data.get(position);
+        final Reddit reddit = data.get(position);
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(reddit.getUrl());
+                Intent detailsIntent = new Intent(Intent.ACTION_VIEW, uri);
+                v.getContext().startActivity(detailsIntent);
+            }
+        });
+
         holder.tvTitle.setText(reddit.getTitle());
         Context context = holder.ivReddit.getContext();
 
@@ -56,12 +68,22 @@ public class RedditAdapter extends RecyclerView.Adapter<RedditAdapter.RedditView
         return data.size();
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
     public class RedditViewHolder extends RecyclerView.ViewHolder {
+        View itemView;
+        RelativeLayout layout;
         ImageView ivReddit;
         TextView tvTitle;
 
         public RedditViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
+            layout = (RelativeLayout) itemView.findViewById(R.id.layout);
             ivReddit = (ImageView) itemView.findViewById(R.id.ivReddit);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
         }

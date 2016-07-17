@@ -1,8 +1,12 @@
 package tomerbu.edu.recyclerweb;
 
 import android.os.AsyncTask;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -26,8 +30,11 @@ import tomerbu.edu.recyclerweb.utils.IOUtils;
 public class RedditService extends AsyncTask<String, Integer, ArrayList<Reddit>> {
 
     private final RecyclerView rvReddits;
-    public RedditService(RecyclerView rvReddits) {
+    private final ProgressBar progressBar;
+
+    public RedditService(RecyclerView rvReddits, ProgressBar progressBar) {
         this.rvReddits = rvReddits;
+        this.progressBar = progressBar;
     }
 
     @Override
@@ -51,6 +58,8 @@ public class RedditService extends AsyncTask<String, Integer, ArrayList<Reddit>>
 
     @Override
     protected void onPostExecute(ArrayList<Reddit> reddits) {
+        progressBar.setVisibility(View.GONE);
+        rvReddits.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         rvReddits.setAdapter(new RedditAdapter(rvReddits.getContext(), reddits));
     }
 }

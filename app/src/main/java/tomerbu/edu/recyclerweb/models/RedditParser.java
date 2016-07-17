@@ -6,9 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by stud27 on 17/07/16.
- */
+
 public class RedditParser {
     public static ArrayList<Reddit> parse(String json) throws JSONException {
         ArrayList<Reddit> reddits = new ArrayList<>();
