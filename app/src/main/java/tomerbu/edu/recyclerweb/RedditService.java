@@ -1,6 +1,7 @@
 package tomerbu.edu.recyclerweb;
 
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -22,16 +23,15 @@ import tomerbu.edu.recyclerweb.utils.IOUtils;
    service.execute();
  */
 
-public class RedditService extends AsyncTask {
+public class RedditService extends AsyncTask<String, Integer, ArrayList<Reddit>> {
 
-    private TextView tvJson;
-    public RedditService(TextView tvJson) {
-        this.tvJson = tvJson;
+    private final RecyclerView rvReddits;
+    public RedditService(RecyclerView rvReddits) {
+        this.rvReddits = rvReddits;
     }
 
-
     @Override
-    protected Object doInBackground(Object[] params) {
+    protected ArrayList<Reddit> doInBackground(String... params) {
         try {
             URL url = new URL("https://www.reddit.com/.json");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -42,9 +42,7 @@ public class RedditService extends AsyncTask {
 
             ArrayList<Reddit> reddits = RedditParser.parse(data);
 
-            Log.d("iTomer", reddits.toString());
-            System.out.println(reddits);
-            return data;
+            return reddits;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,10 +50,7 @@ public class RedditService extends AsyncTask {
     }
 
     @Override
-    protected void onPostExecute(Object o) {
-        if (o != null) {
-            String data = (String) o;
-            tvJson.setText(data);
-        }
+    protected void onPostExecute(ArrayList<Reddit> reddits) {
+        rvReddits.setAdapter(new RedditAdapter(rvReddits.getContext(), reddits));
     }
 }
