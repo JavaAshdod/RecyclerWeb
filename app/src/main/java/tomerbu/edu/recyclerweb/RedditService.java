@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -28,7 +29,9 @@ public class RedditService extends AsyncTask {
     protected Object doInBackground(Object[] params) {
         try {
             URL url = new URL("https://www.reddit.com/.json");
-            URLConnection con = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+
             InputStream in = con.getInputStream();
             String data = IOUtils.getString(in);
             return data;
